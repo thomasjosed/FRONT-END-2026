@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thomas Daruich — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F5F3EE;
+      --surface: #FFFEFB;
+      --accent: #1A1A1A;
+      --accent2: #3B6D11;
+      --muted: #6B6860;
+      --border: rgba(0,0,0,0.1);
+      --tag-bg: #E8F0DE;
+      --tag-text: #3B6D11;
+      --heading: 'Syne', sans-serif;
+      --body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--accent);
+      min-height: 100vh;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(245,243,238,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: var(--heading);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* LAYOUT */
+    .wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 100px 0 80px;
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1.5px;
+      background: var(--accent2);
+    }
+    .hero h1 {
+      font-family: var(--heading);
+      font-size: clamp(48px, 9vw, 88px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+    }
+    .hero h1 span {
+      display: block;
+      color: var(--muted);
+      font-weight: 400;
+      font-size: clamp(32px, 5vw, 52px);
+      letter-spacing: -0.02em;
+    }
+    .hero-desc {
+      max-width: 520px;
+      color: var(--muted);
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.75;
+      border-left: 2px solid var(--accent2);
+      padding-left: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 2.5rem;
+    }
+    .badge {
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 6px 14px;
+      border-radius: 100px;
+      text-transform: uppercase;
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 72px 0;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-title {
+      font-family: var(--heading);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .section-body {
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.8;
+      max-width: 620px;
+    }
+    .section-body p + p {
+      margin-top: 1.2rem;
+    }
+
+    /* EDUCATION CARD */
+    .edu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .edu-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--tag-bg);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .edu-icon svg { width: 22px; height: 22px; }
+    .edu-card h3 {
+      font-family: var(--heading);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .edu-card .edu-sub {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 12px;
+    }
+    .edu-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .edu-tag {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .edu-tag.highlight {
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      border-color: transparent;
+      font-weight: 500;
+    }
+
+    /* SKILLS GRID */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 2rem;
+    }
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .skill-card h4 {
+      font-family: var(--heading);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    .skill-card p {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+    .skill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent2);
+      margin-bottom: 12px;
+    }
+
+    /* PROJECT CARD */
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #639922, #9FE1CB);
+    }
+    .project-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      background: var(--tag-bg);
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+    .project-card h3 {
+      font-family: var(--heading);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .project-card p {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.75;
+    }
+    .project-meta {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* OBJECTIVES */
+    .objectives-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 2rem;
+    }
+    .obj-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+    .obj-card .obj-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+    .obj-card h3 {
+      font-family: var(--heading);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+    .obj-card p {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 0;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer span { font-weight: 300; }
+
+    @media (max-width: 560px) {
+      nav { padding: 0 1.25rem; }
+      .nav-links { display: none; }
+      .wrapper { padding: 0 1.25rem; }
+      .hero { padding: 60px 0 50px; }
+      .objectives-grid { grid-template-columns: 1fr; }
+      .edu-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">Thomas Jose Daruich</div>
+    <ul class="nav-links">
+      <li><a href="#sobre-mi">Sobre mi</a></li>
+      <li><a href="#educacion">Educacion</a></li>
+      <li><a href="#habilidades">Habilidades</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#objetivos">Objetivos</a></li>
+    </ul>
+  </nav>
+
+  <div class="wrapper">
+
+    <!-- HERO / PRESENTACIÓN -->
+    <section class="hero" id="inicio">
+      <div class="hero-eyebrow">Estudiante de Software — Tucumán, Argentina</div>
+      <h1>
+        Thomas<br>
+        <span>Jose Daruich</span>
+      </h1>
+      <div class="hero-badges">
+        <span class="badge">19 años</span>
+        <span class="badge">Desarrollo Web</span>
+        <span class="badge">Front End</span>
+        <span class="badge">Calidad de Software</span>
+      </div>
+      <p class="hero-desc">
+        Estudiante de Tecnicatura en Desarrollo y Calidad de Software, con interés genuino en la programación y en construir productos digitales útiles y bien hechos.
+      </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SOBRE MÍ -->
+    <section id="sobre-mi">
+      <div class="section-label">Sobre mi</div>
+      <h2 class="section-title">Una persona equilibrada<br>con ganas de aprender</h2>
+      <div class="section-body">
+        <p>
+          Tengo 19 años y soy de Concepción, Tucumán. Soy una persona equilibrada: disfruto tanto de los momentos tranquilos como de los más activos. En mi tiempo libre, el gimnasio es una de mis principales formas de desconectar y mantener la energía en orden.
+        </p>
+        <p>
+          Me gusta la música en inglés y en español, de distintos estilos, y me engancho fácil con series y películas de acción o de guerra. Peaky Blinders es un buen ejemplo del tipo de historias que me atrapan.
+        </p>
+        <p>
+          En lo profesional, lo que más me motiva es aprender cosas nuevas, entender cómo funcionan las tecnologías por dentro y ver cómo el código puede convertirse en algo concreto y real.
+        </p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- EDUCACIÓN -->
+    <section id="educacion">
+      <div class="section-label">Educacion</div>
+      <h2 class="section-title">Mi formación</h2>
+      <div class="section-body">
+        <p>
+          Actualmente estoy cursando el segundo año de la Tecnicatura en Desarrollo y Calidad de Software en la UNSTA, una carrera de tres años que combina programación, testing y desarrollo de aplicaciones con un enfoque práctico.
+        </p>
+      </div>
+
+      <div class="edu-card">
+        <div class="edu-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Tecnicatura en Desarrollo y Calidad de Software</h3>
+          <p class="edu-sub">UNSTA — Universidad del Norte Santo Tomás de Aquino · En curso</p>
+          <p style="font-size:14px; color: var(--muted); font-weight:300; line-height:1.7;">
+            Carrera de 3 años orientada al desarrollo de software, con especial énfasis en programación web y aseguramiento de calidad. Las materias que más me interesan hasta ahora son Front End y Fundamentos de Control de Calidad.
+          </p>
+          <div class="edu-tags">
+            <span class="edu-tag highlight">Front End</span>
+            <span class="edu-tag highlight">Control de Calidad</span>
+            <span class="edu-tag">HTML</span>
+            <span class="edu-tag">C</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="edu-card" style="margin-top:12px;">
+        <div class="edu-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Curso de Desarrollo con IA — MoureDev (Brais Moure)</h3>
+          <p class="edu-sub">Certificado obtenido · Formación introductoria</p>
+          <p style="font-size:14px; color: var(--muted); font-weight:300; line-height:1.7;">
+            Curso introductorio de desarrollo con Inteligencia Artificial dictado por Brais Moure, referente hispanohablante en programación. Formación que amplió mi perspectiva sobre las herramientas modernas del desarrollo.
+          </p>
+          <div class="edu-tags">
+            <span class="edu-tag highlight">Certificado</span>
+            <span class="edu-tag">Inteligencia Artificial</span>
+            <span class="edu-tag">Desarrollo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="edu-card" style="margin-top:12px;">
+        <div class="edu-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Educacion secundaria con base en ingles</h3>
+          <p class="edu-sub">Completada</p>
+          <p style="font-size:14px; color: var(--muted); font-weight:300; line-height:1.7;">
+            Finalicé el secundario con una base sólida en inglés, lo que me permite acceder con comodidad a documentación técnica, tutoriales y recursos internacionales en el mundo del desarrollo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- HABILIDADES -->
+    <section id="habilidades">
+      <div class="section-label">Intereses y habilidades</div>
+      <h2 class="section-title">Lo que me mueve<br>y lo que estoy aprendiendo</h2>
+      <div class="section-body">
+        <p>
+          Mi interés principal está en el desarrollo web: construir interfaces, entender cómo se estructuran las páginas y aprender a que las cosas funcionen bien del lado del usuario. También me interesa el control de calidad, que es parte central de mi carrera.
+        </p>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-dot"></div>
+          <h4>HTML</h4>
+          <p>En aprendizaje activo. Estoy construyendo mis bases en estructuración de páginas web.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-dot"></div>
+          <h4>C</h4>
+          <p>Conceptos básicos vistos durante la carrera. Buena base para entender la lógica de la programación.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-dot"></div>
+          <h4>Front End</h4>
+          <p>Materia en curso. Uno de mis mayores intereses dentro de la carrera.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-dot"></div>
+          <h4>Control de Calidad</h4>
+          <p>Fundamentos de QA vistos en la carrera. Me interesa aplicarlo en proyectos reales.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-dot"></div>
+          <h4>Ingles tecnico</h4>
+          <p>Capacidad para leer documentación, tutoriales y recursos en inglés sin dificultad.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-dot"></div>
+          <h4>IA aplicada al desarrollo</h4>
+          <p>Formación introductoria con MoureDev. Conocimiento de herramientas de IA para programadores.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PROYECTOS -->
+    <section id="proyectos">
+      <div class="section-label">Proyectos</div>
+      <h2 class="section-title">Trabajo concreto,<br>no solo teoria</h2>
+      <div class="section-body">
+        <p>
+          Aunque estoy en los primeros pasos de mi carrera, ya tuve la oportunidad de participar en un proyecto real y presentarlo ante un público. Es el tipo de experiencia que más me enseña.
+        </p>
+      </div>
+
+      <div class="project-card">
+        <span class="project-tag">Expo UNSTA 2025</span>
+        <h3>Volando con Tulio</h3>
+        <p>
+          Landing page sobre turismo de viajes, desarrollada en equipo y presentada en la Expo UNSTA 2025. El proyecto consistió en diseñar y construir una página web orientada a viajeros, con información sobre destinos y servicios turísticos. Fue mi primera experiencia presentando un trabajo de desarrollo en un evento académico real.
+        </p>
+        <div class="project-meta">
+          <span class="badge">Landing Page</span>
+          <span class="badge">Trabajo en equipo</span>
+          <span class="badge">Presentacion academica</span>
+          <span class="badge">Turismo</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- OBJETIVOS -->
+    <section id="objetivos">
+      <div class="section-label">Objetivos</div>
+      <h2 class="section-title">A donde quiero llegar</h2>
+      <div class="section-body">
+        <p>
+          Tengo claro que estoy en el comienzo del camino, y eso no me genera presión sino motivación. Cada materia, cada proyecto y cada línea de código que escribo es un paso hacia donde quiero estar.
+        </p>
+      </div>
+
+      <div class="objectives-grid">
+        <div class="obj-card">
+          <div class="obj-label">Corto plazo</div>
+          <h3>Aprobar Front End y Back End</h3>
+          <p>
+            Mi objetivo inmediato es superar las materias de Front End y luego Back End, consolidando mis conocimientos de desarrollo web de manera progresiva y ordenada.
+          </p>
+        </div>
+        <div class="obj-card">
+          <div class="obj-label">Mediano plazo</div>
+          <h3>Seguir aprendiendo y practicando</h3>
+          <p>
+            No quiero limitarme al programa de la carrera. Planeo complementar mi formación con proyectos propios, cursos y tecnologías que vaya descubriendo en el camino.
+          </p>
+        </div>
+        <div class="obj-card" style="grid-column: 1 / -1;">
+          <div class="obj-label">Largo plazo</div>
+          <h3>Recibirme y convertirme en un buen profesional</h3>
+          <p>
+            El objetivo final es claro: terminar la carrera, obtener el título y desarrollarme como un profesional del software en el que la gente pueda confiar. Quiero trabajar en el desarrollo de aplicaciones y páginas web, idealmente contribuyendo a productos que tengan impacto real.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <footer>
+      <span>Thomas Jose Daruich — Concepcion, Tucuman, Argentina</span>
+      <span>Tecnicatura en Desarrollo y Calidad de Software · UNSTA</span>
+      <div style="width:100%; text-align:center; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); font-size:12px; color:var(--muted); font-weight:300; letter-spacing:0.03em;">
+        <a href="https://www.instagram.com/thomasjosed_/" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:var(--muted); font-size:13px; font-weight:400;" onmouseover="this.style.color='#3B6D11'" onmouseout="this.style.color='var(--muted)'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+          @thomasjosed_
+        </a>
+        &copy; 2025 Thomas Jose Daruich. Todos los derechos reservados.
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html>
