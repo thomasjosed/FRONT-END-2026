@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thomas Jose Daruich — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Variables ─────────────────────────────────────────── */
+    :root {
+      --bg:        #f5f4f2;
+      --surface:   #ffffff;
+      --surface2:  #f0efed;
+      --border:    #e5e3df;
+      --ink:       #1a1916;
+      --ink-mid:   #5a5750;
+      --ink-soft:  #9b9791;
+      --accent:    #2e6af6;
+      --accent-dk: #1a4fd4;
+      --gold:      #c9a84c;
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --shadow-sm: 0 2px 12px rgba(0,0,0,.06);
+      --shadow-md: 0 8px 32px rgba(0,0,0,.09);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,.12);
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+      --max-w: 900px;
+      --transition: 0.25s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ─── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--ink);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    /* ─── Layout helpers ─────────────────────────────────────── */
+    .container {
+      max-width: var(--max-w);
+      margin-inline: auto;
+      padding-inline: 24px;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(245,244,242,.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 58px;
+      gap: 16px;
+    }
+    .nav-brand {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      letter-spacing: -.01em;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .02em;
+      color: var(--ink-mid);
+      padding: 5px 12px;
+      border-radius: 100px;
+      transition: background var(--transition), color var(--transition);
+    }
+    .nav-links a:hover {
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────────── */
+    header {
+      padding: 100px 0 80px;
+      text-align: center;
+    }
+    .header-eyebrow {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(46,106,246,.08);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+    header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 7vw, 4.4rem);
+      line-height: 1.08;
+      letter-spacing: -.03em;
+      color: var(--ink);
+      margin-bottom: 18px;
+    }
+    header p {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--ink-mid);
+      max-width: 420px;
+      margin-inline: auto;
+    }
+    .header-divider {
+      width: 48px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      border-radius: 2px;
+      margin: 40px auto 0;
+    }
+
+    /* ─── SECTION base ───────────────────────────────────────── */
+    section {
+      padding: 72px 0;
+    }
+    section + section {
+      border-top: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      letter-spacing: -.025em;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 40px;
+    }
+
+    /* ─── SOBRE MÍ ───────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .about-photo-wrap {
+      position: relative;
+    }
+    .about-photo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--border);
+      z-index: 0;
+    }
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      z-index: 1;
+      background: var(--surface2);
+    }
+    .about-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #dde8ff 0%, #eee8d8 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      z-index: 1;
+    }
+    .about-photo-placeholder svg {
+      opacity: .35;
+    }
+    .about-photo-placeholder span {
+      font-size: .7rem;
+      color: var(--ink-mid);
+      letter-spacing: .05em;
+    }
+    .about-text p + p { margin-top: 16px; }
+    .about-text p {
+      color: var(--ink-mid);
+      font-weight: 300;
+      font-size: 1.02rem;
+    }
+    .about-text strong { color: var(--ink); font-weight: 500; }
+
+    /* ─── ESTUDIOS ───────────────────────────────────────────── */
+    .studies-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px 28px 24px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    .card-heading {
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-heading::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* Grade table */
+    .grade-list { width: 100%; border-collapse: collapse; }
+    .grade-list tr { border-bottom: 1px solid var(--border); }
+    .grade-list tr:last-child { border-bottom: none; }
+    .grade-list td {
+      padding: 9px 0;
+      font-size: .9rem;
+      color: var(--ink-mid);
+      font-weight: 300;
+      vertical-align: middle;
+    }
+    .grade-list td:first-child { color: var(--ink); font-weight: 400; }
+    .grade-list td:last-child { text-align: right; }
+    .badge-grade {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 100px;
+      background: var(--surface2);
+      color: var(--ink);
+      min-width: 38px;
+      text-align: center;
+    }
+    .badge-grade.ten {
+      background: rgba(46,106,246,.1);
+      color: var(--accent);
+    }
+    .badge-grade.high {
+      background: rgba(40,180,100,.1);
+      color: #1e9955;
+    }
+
+    /* Current subjects */
+    .current-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .9rem;
+      color: var(--ink-mid);
+      font-weight: 300;
+    }
+    .current-list li:last-child { border-bottom: none; }
+    .current-list li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+    }
+
+    /* ─── HABILIDADES ────────────────────────────────────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px 20px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .skill-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    .skill-icon {
+      font-size: 1.7rem;
+      margin-bottom: 12px;
+    }
+    .skill-card h3 {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+      letter-spacing: -.01em;
+    }
+    .skill-card p {
+      font-size: .82rem;
+      color: var(--ink-soft);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    /* ─── ASPIRACIONES ───────────────────────────────────────── */
+    .aspirations-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .aspiration-item {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .aspiration-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateX(4px);
+    }
+    .aspiration-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dk));
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .aspiration-item h3 {
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .aspiration-item p {
+      font-size: .88rem;
+      color: var(--ink-soft);
+      font-weight: 300;
+    }
+
+    /* ─── COMPAÑEROS ─────────────────────────────────────────── */
+    .peers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .peer-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px 16px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .peer-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+    .peer-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #dde8ff, #eee8d8);
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--ink-mid);
+    }
+    .peer-card h3 {
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+      color: var(--ink);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .peer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .73rem;
+      font-weight: 500;
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 100px;
+      border: 1px solid rgba(46,106,246,.25);
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .peer-link:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ─── INTERESES ──────────────────────────────────────────── */
+    .interests-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .interest-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .88rem;
+      font-weight: 400;
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 9px 18px;
+      border-radius: 100px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition), background var(--transition);
+    }
+    .interest-tag:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 4px 18px rgba(46,106,246,.25);
+      transform: translateY(-2px);
+    }
+    .interest-tag span { font-size: 1.1rem; }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 0;
+      text-align: center;
+    }
+    footer p {
+      font-size: .82rem;
+      color: var(--ink-soft);
+      font-weight: 300;
+    }
+    footer strong {
+      color: var(--ink-mid);
+      font-weight: 500;
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 720px) {
+      .about-grid        { grid-template-columns: 1fr; }
+      .about-photo-wrap  { max-width: 180px; margin-inline: auto; }
+      .studies-grid      { grid-template-columns: 1fr; }
+      .skills-grid       { grid-template-columns: 1fr 1fr; }
+      .peers-grid        { grid-template-columns: 1fr 1fr; }
+      .nav-links a       { font-size: .72rem; padding: 4px 9px; }
+    }
+    @media (max-width: 460px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      .peers-grid  { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAV ════════════════════════════════════════════════ -->
+  <nav>
+    <div class="container">
+      <span class="nav-brand">Thomas Daruich</span>
+      <ul class="nav-links">
+        <li><a href="#sobre-mi">Sobre mí</a></li>
+        <li><a href="#estudios">Estudios</a></li>
+        <li><a href="#experiencia">Experiencia</a></li>
+        <li><a href="#aspiraciones">Aspiraciones</a></li>
+        <li><a href="#companeros">Compañeros</a></li>
+        <li><a href="#intereses">Intereses</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══ HEADER ══════════════════════════════════════════════ -->
+  <header>
+    <div class="container">
+      <div class="header-eyebrow">Portafolio Personal · 2026</div>
+      <h1>Thomas Jose<br>Daruich</h1>
+      <p>Estudiante de Desarrollo de Software con pasión por la tecnología y las soluciones digitales.</p>
+      <div class="header-divider"></div>
+    </div>
+  </header>
+
+  <!-- ═══ MAIN ════════════════════════════════════════════════ -->
+  <main>
+
+    <!-- ── SOBRE MÍ ─────────────────────────────────────────── -->
+    <section id="sobre-mi">
+      <div class="container">
+        <p class="section-label">01 — Quién soy</p>
+        <h2 class="section-title">Sobre mí</h2>
+        <div class="about-grid">
+
+          <div class="about-photo-wrap">
+            <!-- Reemplazá "foto.jpg" con tu imagen real -->
+            <img
+              class="about-photo"
+              src="foto.jpg"
+              alt="Foto de Thomas Jose Daruich"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="about-photo-placeholder" style="display:none;">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              </svg>
+              <span>foto.jpg</span>
+            </div>
+          </div>
+
+          <div class="about-text">
+            <p>
+              Mi nombre es <strong>Thomas Jose Daruich</strong> y soy estudiante de Desarrollo de Software. Desde temprano me interesé por entender cómo funcionan los sistemas, tanto desde el lado del código como desde el hardware que los sostiene.
+            </p>
+            <p>
+              Me encuentro en plena formación académica, avanzando con constancia en materias que van desde la programación y las bases de datos hasta el inglés técnico y la gestión de equipos. Creo firmemente que el conocimiento sólido es la base de cualquier proyecto exitoso.
+            </p>
+            <p>
+              Fuera del ámbito académico, soy una persona activa: el gimnasio y el deporte forman parte de mi rutina. También tengo un interés genuino por los autos y la mecánica, lo que refuerza mi curiosidad por comprender cómo funcionan las cosas por dentro.
+            </p>
+            <p>
+              Busco construir una carrera donde pueda combinar creatividad técnica con impacto real, generando soluciones que resuelvan problemas concretos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ESTUDIOS ──────────────────────────────────────────── -->
+    <section id="estudios">
+      <div class="container">
+        <p class="section-label">02 — Formación académica</p>
+        <h2 class="section-title">Estudios</h2>
+        <div class="studies-grid">
+
+          <!-- A) Materias aprobadas -->
+          <div class="card">
+            <p class="card-heading">Materias aprobadas</p>
+            <table class="grade-list">
+              <tbody>
+                <tr>
+                  <td>Desarrollo de Software</td>
+                  <td><span class="badge-grade ten">10</span></td>
+                </tr>
+                <tr>
+                  <td>Formación Humanística I</td>
+                  <td><span class="badge-grade high">7.50</span></td>
+                </tr>
+                <tr>
+                  <td>Algoritmos y Paradigmas</td>
+                  <td><span class="badge-grade">4</span></td>
+                </tr>
+                <tr>
+                  <td>Álgebra I</td>
+                  <td><span class="badge-grade">6.50</span></td>
+                </tr>
+                <tr>
+                  <td>Álgebra II</td>
+                  <td><span class="badge-grade high">7</span></td>
+                </tr>
+                <tr>
+                  <td>Seminario Informático I</td>
+                  <td><span class="badge-grade high">8</span></td>
+                </tr>
+                <tr>
+                  <td>Base de Datos</td>
+                  <td><span class="badge-grade ten">10</span></td>
+                </tr>
+                <tr>
+                  <td>Inglés A1</td>
+                  <td><span class="badge-grade high">8</span></td>
+                </tr>
+                <tr>
+                  <td>Gestión de Recursos Humanos</td>
+                  <td><span class="badge-grade high">7.50</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- B) Materias en curso -->
+          <div class="card">
+            <p class="card-heading">Materias en curso</p>
+            <ul class="current-list">
+              <li>Inglés A2</li>
+              <li>Fundamento de Control de Calidad</li>
+              <li>Desarrollo Front-End</li>
+              <li>Seminario Informático II</li>
+              <li>Formación Humanística II</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EXPERIENCIA Y HABILIDADES ─────────────────────────── -->
+    <section id="experiencia">
+      <div class="container">
+        <p class="section-label">03 — Perfil</p>
+        <h2 class="section-title">Experiencia & Habilidades</h2>
+        <div class="skills-grid">
+
+          <div class="skill-card">
+            <div class="skill-icon">💻</div>
+            <h3>Tecnología & Software</h3>
+            <p>Apasionado por el desarrollo de software, la programación y las nuevas tecnologías. En constante proceso de aprendizaje.</p>
+          </div>
+
+          <div class="skill-card">
+            <div class="skill-icon">🔧</div>
+            <h3>Hardware & Mecánica</h3>
+            <p>Interés profundo por el funcionamiento del hardware y la mecánica automotriz. Me gusta entender los sistemas desde adentro.</p>
+          </div>
+
+          <div class="skill-card">
+            <div class="skill-icon">🏋️</div>
+            <h3>Deporte & Disciplina</h3>
+            <p>El gimnasio y las actividades deportivas son parte de mi rutina diaria. La disciplina física refuerza el enfoque mental.</p>
+          </div>
+
+          <div class="skill-card">
+            <div class="skill-icon">🗄️</div>
+            <h3>Base de Datos</h3>
+            <p>Formación sólida en diseño y gestión de bases de datos. Nota máxima obtenida en la materia correspondiente.</p>
+          </div>
+
+          <div class="skill-card">
+            <div class="skill-icon">🌐</div>
+            <h3>Desarrollo Front-End</h3>
+            <p>Actualmente cursando y aplicando conocimientos de maquetado web, HTML, CSS y diseño de interfaces de usuario.</p>
+          </div>
+
+          <div class="skill-card">
+            <div class="skill-icon">🤝</div>
+            <h3>Trabajo en Equipo</h3>
+            <p>Formación en gestión de recursos humanos y habilidades blandas que complementan el perfil técnico.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ASPIRACIONES ──────────────────────────────────────── -->
+    <section id="aspiraciones">
+      <div class="container">
+        <p class="section-label">04 — Objetivos</p>
+        <h2 class="section-title">Aspiraciones Profesionales</h2>
+        <div class="aspirations-list">
+
+          <div class="aspiration-item">
+            <div class="aspiration-num">1</div>
+            <div>
+              <h3>Desarrollarme como profesional IT</h3>
+              <p>Mi objetivo a corto plazo es consolidar mis conocimientos en desarrollo de software y adquirir experiencia real trabajando en proyectos concretos, ya sea de forma freelance o en equipos de trabajo.</p>
+            </div>
+          </div>
+
+          <div class="aspiration-item">
+            <div class="aspiration-num">2</div>
+            <div>
+              <h3>Crear soluciones funcionales y escalables</h3>
+              <p>Me interesa desarrollar aplicaciones y sistemas que resuelvan problemas reales, con código limpio y bien estructurado. Quiero que cada proyecto tenga impacto tangible.</p>
+            </div>
+          </div>
+
+          <div class="aspiration-item">
+            <div class="aspiration-num">3</div>
+            <div>
+              <h3>Integrar hardware y software</h3>
+              <p>Mi interés por la mecánica y el hardware me impulsa a entender la relación completa entre el componente físico y el software que lo gestiona. Áreas como IoT o sistemas embebidos me generan curiosidad genuina.</p>
+            </div>
+          </div>
+
+          <div class="aspiration-item">
+            <div class="aspiration-num">4</div>
+            <div>
+              <h3>Crecer dentro del mundo IT</h3>
+              <p>A mediano plazo busco posicionarme en el sector tecnológico, ganar experiencia profesional y seguir formándome para asumir responsabilidades cada vez más complejas dentro de equipos de desarrollo.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── COMPAÑEROS ────────────────────────────────────────── -->
+    <section id="companeros">
+      <div class="container">
+        <p class="section-label">05 — Red</p>
+        <h2 class="section-title">Compañeros</h2>
+        <div class="peers-grid">
+
+          <div class="peer-card">
+            <div class="peer-avatar">BB</div>
+            <h3>Bruno Bottone</h3>
+            <a class="peer-link" href="https://www.instagram.com/bottonebrunito_/" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              Instagram
+            </a>
+          </div>
+
+          <div class="peer-card">
+            <div class="peer-avatar">DM</div>
+            <h3>David Medina</h3>
+            <a class="peer-link" href="https://www.instagram.com/sdavidmedina1/" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              Instagram
+            </a>
+          </div>
+
+          <div class="peer-card">
+            <div class="peer-avatar">LM</div>
+            <h3>Luca Valentino Mariani</h3>
+            <a class="peer-link" href="https://www.instagram.com/lucavmariani_/" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              Instagram
+            </a>
+          </div>
+
+          <div class="peer-card">
+            <div class="peer-avatar">LM</div>
+            <h3>Lautaro Martinez</h3>
+            <a class="peer-link" href="https://www.instagram.com/__laumartinezz/" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              Instagram
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── INTERESES ──────────────────────────────────────────── -->
+    <section id="intereses">
+      <div class="container">
+        <p class="section-label">06 — Pasatiempos</p>
+        <h2 class="section-title">Intereses</h2>
+        <div class="interests-wrap">
+          <div class="interest-tag"><span>🏋️</span> Gimnasio</div>
+          <div class="interest-tag"><span>⚽</span> Deportes</div>
+          <div class="interest-tag"><span>💻</span> Tecnología</div>
+          <div class="interest-tag"><span>🚗</span> Autos & Mecánica</div>
+          <div class="interest-tag"><span>🎮</span> Videojuegos</div>
+          <div class="interest-tag"><span>🔌</span> Hardware</div>
+          <div class="interest-tag"><span>📐</span> Programación</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══════════════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <p>© 2026 <strong>Thomas Jose Daruich</strong> — Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
