@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ejercicios CSS – Frontend</title>
+
+  <!-- Google Fonts: Títulos con Playfair Display, cuerpo con DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =============================================
+       VARIABLES Y RESET GLOBAL
+    ============================================= */
+    :root {
+      --clr-bg:        #f5f2ee;
+      --clr-surface:   #ffffff;
+      --clr-primary:   #2d4a3e;   /* verde musgo oscuro */
+      --clr-accent:    #c8873a;   /* ámbar cálido */
+      --clr-accent-lt: #f0dfc0;
+      --clr-text:      #1e2022;
+      --clr-muted:     #6b7280;
+      --clr-border:    #e2ddd7;
+      --radius-sm:     8px;
+      --radius-md:     14px;
+      --radius-lg:     22px;
+      --shadow-card:   0 4px 24px rgba(0,0,0,.10), 0 1px 4px rgba(0,0,0,.06);
+      --shadow-hover:  0 12px 40px rgba(0,0,0,.16), 0 2px 8px rgba(0,0,0,.08);
+      --transition:    .25s cubic-bezier(.4,0,.2,1);
+      --font-display:  'Playfair Display', Georgia, serif;
+      --font-body:     'DM Sans', system-ui, sans-serif;
+      --sidebar-w:     240px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      line-height: 1.6;
+    }
+
+    /* ─── Separadores de sección ─── */
+    .section-block {
+      padding: 64px 32px;
+    }
+    .section-block + .section-block {
+      border-top: 2px solid var(--clr-border);
+    }
+
+    /* ─── Etiqueta de ejercicio ─── */
+    .exercise-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-body);
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--clr-accent);
+      background: var(--clr-accent-lt);
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      color: var(--clr-primary);
+      margin-bottom: 36px;
+    }
+
+    /* =============================================
+       EJERCICIO 1 – TARJETA DE PRODUCTO
+    ============================================= */
+    .ex1-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Tarjeta principal */
+    .product-card {
+      display: grid;
+      /* Desktop: dos columnas */
+      grid-template-columns: 280px 1fr;
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      background: var(--clr-surface);
+      overflow: hidden;
+      max-width: 720px;
+      width: 100%;
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .product-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    /* Área de imagen */
+    .product-img {
+      background: linear-gradient(135deg, #d6eadf 0%, #b5d5c5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 240px;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 65%);
+    }
+    /* Icono SVG decorativo como "imagen de producto" */
+    .product-img svg {
+      width: 90px;
+      height: 90px;
+      opacity: .75;
+      z-index: 1;
+    }
+
+    /* Área de información */
+    .product-info {
+      padding: 28px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .product-badge {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--clr-accent);
+    }
+    .product-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--clr-primary);
+      line-height: 1.25;
+    }
+    .product-desc {
+      font-size: .9rem;
+      color: var(--clr-muted);
+      flex: 1;
+    }
+
+    /* Footer de la tarjeta: precio + botón */
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      gap: 12px;
+    }
+    .product-price {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--clr-primary);
+    }
+    .product-price span {
+      font-size: .85rem;
+      font-weight: 400;
+      color: var(--clr-muted);
+      text-decoration: line-through;
+      margin-right: 4px;
+    }
+    .btn-buy {
+      background: var(--clr-primary);
+      color: #fff;
+      border: none;
+      padding: 11px 22px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: .88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      white-space: nowrap;
+    }
+    .btn-buy:hover {
+      background: var(--clr-accent);
+      transform: scale(1.04);
+    }
+
+    /* ── Responsive: mobile apila imagen arriba, texto abajo ── */
+    @media (max-width: 600px) {
+      .product-card {
+        grid-template-columns: 1fr;
+      }
+      .product-img {
+        min-height: 180px;
+      }
+    }
+
+
+    /* =============================================
+       EJERCICIO 2 – BARRA DE NAVEGACIÓN
+    ============================================= */
+    /* El <section> del ejercicio 2 no tiene padding superior
+       para que la nav quede pegada al borde */
+    .ex2-section {
+      padding-top: 0 !important;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+      background: var(--clr-primary);
+      color: #fff;
+      position: sticky;    /* sticky para demostrar el efecto */
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(0,0,0,.18);
+    }
+
+    /* Logo alineado a la izquierda */
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo-dot {
+      width: 8px; height: 8px;
+      background: var(--clr-accent);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Menú alineado a la derecha */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+    .nav-menu a {
+      color: rgba(255,255,255,.78);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      transition: color var(--transition), background var(--transition);
+    }
+    .nav-menu a:hover {
+      color: #fff;
+      background: rgba(255,255,255,.12);
+    }
+    .nav-menu a.active {
+      color: #fff;
+      background: var(--clr-accent);
+    }
+
+    /* Botón hamburguesa (oculto en desktop) */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px; height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    /* ── Responsive nav ── */
+    @media (max-width: 640px) {
+      .nav-toggle { display: flex; }
+
+      /* El menú se convierte en desplegable vertical */
+      .nav-menu {
+        display: none;        /* oculto por defecto */
+        flex-direction: column;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: var(--clr-primary);
+        padding: 12px 24px 20px;
+        gap: 4px;
+        box-shadow: 0 8px 24px rgba(0,0,0,.22);
+      }
+      /* Se muestra cuando el toggle activa la clase .open */
+      .nav-menu.open { display: flex; }
+      .nav-menu a { width: 100%; }
+    }
+
+    /* Texto de demostración bajo la navbar */
+    .ex2-body {
+      padding: 32px;
+      font-size: .9rem;
+      color: var(--clr-muted);
+      max-width: 600px;
+    }
+
+
+    /* =============================================
+       EJERCICIO 3 – PANEL ADMINISTRATIVO
+    ============================================= */
+    /* Contenedor de altura fija para simular "toda la pantalla" */
+    .admin-shell {
+      display: flex;
+      height: 520px;          /* altura acotada para la demo */
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    /* ── Sidebar fijo ── */
+    .admin-sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;         /* no se encoge */
+      background: var(--clr-primary);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;       /* scroll solo si hay muchos items */
+    }
+    .sidebar-brand {
+      padding: 24px 20px 16px;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .sidebar-nav {
+      list-style: none;
+      padding: 12px 0;
+      flex: 1;
+    }
+    .sidebar-nav li a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      color: rgba(255,255,255,.72);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      border-left: 3px solid transparent;
+      transition: color var(--transition), border-color var(--transition), background var(--transition);
+    }
+    .sidebar-nav li a:hover,
+    .sidebar-nav li a.active {
+      color: #fff;
+      background: rgba(255,255,255,.08);
+      border-left-color: var(--clr-accent);
+    }
+    .sidebar-icon {
+      width: 16px; height: 16px;
+      opacity: .8;
+    }
+    .sidebar-footer {
+      padding: 16px 20px;
+      font-size: .78rem;
+      color: rgba(255,255,255,.4);
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+
+    /* ── Área de contenido ── */
+    .admin-content {
+      flex: 1;
+      overflow-y: auto;       /* solo esta área tiene scroll */
+      background: var(--clr-bg);
+      padding: 28px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .admin-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--clr-primary);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--clr-primary);
+      color: var(--clr-primary);
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: .84rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+    .btn-outline:hover { background: var(--clr-primary); color: #fff; }
+
+    /* Tarjetas de estadística */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 14px;
+    }
+    .stat-card {
+      background: var(--clr-surface);
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+      padding: 18px 16px;
+    }
+    .stat-label {
+      font-size: .74rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--clr-muted);
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--clr-primary);
+    }
+
+    /* Tabla simple */
+    .admin-table {
+      background: var(--clr-surface);
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      font-size: .86rem;
+    }
+    .admin-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .admin-table thead th {
+      background: var(--clr-bg);
+      padding: 10px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: .78rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--clr-muted);
+      border-bottom: 1.5px solid var(--clr-border);
+    }
+    .admin-table tbody td {
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--clr-border);
+      color: var(--clr-text);
+    }
+    .admin-table tbody tr:last-child td { border-bottom: none; }
+    .admin-table tbody tr:hover td { background: rgba(200,135,58,.06); }
+
+    /* Badge de estado */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: .74rem;
+      font-weight: 600;
+    }
+    .badge-green  { background: #d1fae5; color: #065f46; }
+    .badge-amber  { background: #fef3c7; color: #92400e; }
+    .badge-gray   { background: #f3f4f6; color: #4b5563; }
+
+    /* Contenido extra para forzar scroll */
+    .filler-text {
+      font-size: .84rem;
+      color: var(--clr-muted);
+      line-height: 1.8;
+      padding: 16px;
+      background: var(--clr-surface);
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+    }
+
+
+    /* =============================================
+       EJERCICIO 4 – MURO DE PROYECTOS
+    ============================================= */
+    /* Grid responsive con CSS Grid */
+    .projects-grid {
+      display: grid;
+      /* auto-fill: rellena las columnas según el espacio disponible */
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--clr-surface);
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .project-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-5px);
+    }
+
+    /* Cabecera de color de la tarjeta */
+    .project-cover {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+    }
+    /* Distintos colores por tarjeta */
+    .cover-1 { background: linear-gradient(135deg, #a8d8b9, #6bbf8a); }
+    .cover-2 { background: linear-gradient(135deg, #f7c59f, #e8935e); }
+    .cover-3 { background: linear-gradient(135deg, #b8d4f8, #6fa4e0); }
+    .cover-4 { background: linear-gradient(135deg, #f5b8c8, #e07090); }
+    .cover-5 { background: linear-gradient(135deg, #d4b8f8, #9e6fd8); }
+    .cover-6 { background: linear-gradient(135deg, #b8f0e0, #5cc9a8); }
+
+    .project-body {
+      padding: 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .project-tag {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--clr-accent);
+    }
+    .project-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: var(--clr-primary);
+      line-height: 1.3;
+    }
+    .project-desc {
+      font-size: .83rem;
+      color: var(--clr-muted);
+      flex: 1;
+    }
+    .project-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-top: 1px solid var(--clr-border);
+      font-size: .78rem;
+      color: var(--clr-muted);
+    }
+    .project-author {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .avatar {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--clr-accent-lt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--clr-accent);
+    }
+    .project-date { color: var(--clr-muted); }
+
+  </style>
+</head>
+<body>
+
+<!-- ========================================================
+     EJERCICIO 1 – TARJETA DE PRESENTACIÓN DE PRODUCTO
+======================================================== -->
+<section class="section-block ex1-section">
+  <div class="exercise-label">Ejercicio 1</div>
+  <h2 class="section-title">Tarjeta de Presentación de Producto</h2>
+
+  <div class="ex1-wrapper">
+    <!--
+      Grid de dos columnas en desktop (imagen | info).
+      En mobile (<600 px) pasa a una sola columna.
+    -->
+    <article class="product-card">
+
+      <!-- Área de imagen -->
+      <div class="product-img" aria-label="Imagen del producto">
+        <!-- Icono SVG de cámara como placeholder de producto -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2d4a3e" stroke-width="1.4"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8
+                   a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </div>
+
+      <!-- Área de información -->
+      <div class="product-info">
+        <span class="product-badge">Nuevo · Edición Limitada</span>
+        <h3 class="product-title">Cámara Analógica Heritage 35mm</h3>
+        <p class="product-desc">
+          Capturá momentos con la calidez del celuloide. Cuerpo de aleación de magnesio,
+          visor óptico de cobertura total y exposición manual completa.
+          Compatible con todos los films ISO 100–3200.
+        </p>
+
+        <!-- Footer: precio a la izquierda, botón a la derecha -->
+        <div class="product-footer">
+          <div class="product-price">
+            <span>$320</span>$249
+          </div>
+          <button class="btn-buy">Comprar ahora</button>
+        </div>
+      </div>
+
+    </article>
+  </div>
+</section>
+
+
+<!-- ========================================================
+     EJERCICIO 2 – BARRA DE NAVEGACIÓN SUPERIOR
+======================================================== -->
+<section class="section-block ex2-section">
+  <div style="padding: 0 32px 28px;">
+    <div class="exercise-label">Ejercicio 2</div>
+    <h2 class="section-title">Barra de Navegación Superior</h2>
+  </div>
+
+  <!--
+    Navbar sticky: logo a la izquierda, menú a la derecha.
+    En mobile (<640 px) aparece el botón hamburguesa y el menú
+    se despliega verticalmente al hacer click.
+  -->
+  <nav class="navbar" role="navigation" aria-label="Navegación principal">
+
+    <!-- Logo -->
+    <div class="nav-logo">
+      <span class="nav-logo-dot"></span>
+      Verdure
+    </div>
+
+    <!-- Menú desktop / desplegable mobile -->
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="#" class="active">Inicio</a></li>
+      <li><a href="#">Productos</a></li>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Contacto</a></li>
+    </ul>
+
+    <!-- Botón hamburguesa (visible solo en mobile) -->
+    <button class="nav-toggle" id="navToggle"
+            aria-expanded="false" aria-controls="navMenu"
+            aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </nav>
+
+  <div class="ex2-body">
+    La barra de navegación de arriba es <strong>sticky</strong>: permanece visible al hacer scroll.
+    En pantallas pequeñas (≤ 640 px) los ítems se ocultan y aparece el ícono de menú hamburguesa.
+  </div>
+</section>
+
+
+<!-- ========================================================
+     EJERCICIO 3 – PANEL ADMINISTRATIVO
+======================================================== -->
+<section class="section-block">
+  <div class="exercise-label">Ejercicio 3</div>
+  <h2 class="section-title">Panel Administrativo</h2>
+
+  <!--
+    Flexbox row:
+    - .admin-sidebar → ancho fijo, no se encoge (flex-shrink: 0)
+    - .admin-content → flex: 1 (ocupa el resto), overflow-y: auto (scroll propio)
+  -->
+  <div class="admin-shell">
+
+    <!-- ── Menú lateral izquierdo ── -->
+    <aside class="admin-sidebar" aria-label="Menú lateral">
+      <div class="sidebar-brand">✦ AdminPanel</div>
+
+      <ul class="sidebar-nav">
+        <li>
+          <a href="#" class="active" aria-current="page">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+            </svg>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            Usuarios
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+              <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+              <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+            Pedidos
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Analíticas
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+            </svg>
+            Configuración
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">v2.4.1 · Verdure Admin</div>
+    </aside>
+
+    <!-- ── Área de contenido (con scroll) ── -->
+    <main class="admin-content" aria-label="Contenido principal">
+      <div class="admin-header">
+        <h3 class="admin-title">Dashboard</h3>
+        <button class="btn-outline">+ Nuevo Pedido</button>
+      </div>
+
+      <!-- Tarjetas de estadísticas -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Usuarios</div>
+          <div class="stat-value">4 820</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pedidos Hoy</div>
+          <div class="stat-value">138</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Ingresos</div>
+          <div class="stat-value">$18 k</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tasa Conv.</div>
+          <div class="stat-value">3.6 %</div>
+        </div>
+      </div>
+
+      <!-- Tabla de pedidos recientes -->
+      <div class="admin-table">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Producto</th>
+              <th>Estado</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#4201</td><td>Ana Gómez</td><td>Cámara Heritage</td>
+              <td><span class="badge badge-green">Entregado</span></td><td>$249</td>
+            </tr>
+            <tr>
+              <td>#4200</td><td>Luis Pérez</td><td>Film ISO 400 ×3</td>
+              <td><span class="badge badge-amber">En camino</span></td><td>$38</td>
+            </tr>
+            <tr>
+              <td>#4199</td><td>Marta Silva</td><td>Trípode Compact</td>
+              <td><span class="badge badge-gray">Pendiente</span></td><td>$75</td>
+            </tr>
+            <tr>
+              <td>#4198</td><td>Diego Ruiz</td><td>Bolso de Cuero</td>
+              <td><span class="badge badge-green">Entregado</span></td><td>$120</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Contenido extra para demostrar el scroll del área de contenido -->
+      <div class="filler-text">
+        <strong>Nota sobre el scroll:</strong> este bloque es contenido adicional para
+        demostrar que <em>solo el área de contenido</em> tiene scroll vertical, mientras que
+        el menú lateral permanece fijo en su posición. El sidebar no se mueve cuando
+        se desplaza esta columna derecha.
+        <br><br>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum
+        dignissim ultricies. Fusce aliquet pellentesque quam, in efficitur leo vehicula a.
+        Proin sed diam cursus arcu gravida vestibulum.
+      </div>
+    </main>
+
+  </div><!-- .admin-shell -->
+</section>
+
+
+<!-- ========================================================
+     EJERCICIO 4 – MURO DE PROYECTOS
+======================================================== -->
+<section class="section-block">
+  <div class="exercise-label">Ejercicio 4</div>
+  <h2 class="section-title">Muro de Proyectos</h2>
+
+  <!--
+    CSS Grid con auto-fill y minmax:
+    - En pantallas grandes: 3-4 columnas
+    - En medianas: 2 columnas
+    - En pequeñas: 1 columna
+    Gap uniforme entre todas las tarjetas
+  -->
+  <div class="projects-grid">
+
+    <!-- Tarjeta 1 -->
+    <article class="project-card">
+      <div class="project-cover cover-1">🌿</div>
+      <div class="project-body">
+        <span class="project-tag">Branding</span>
+        <h3 class="project-name">Identidad Visual Verdure</h3>
+        <p class="project-desc">Rediseño completo del sistema de marca: paleta, tipografía, iconografía y guía de voz.</p>
+      </div>
+      <div class="project-footer">
+        <div class="project-author">
+          <div class="avatar">AG</div> Ana G.
+        </div>
+        <span class="project-date">Mar 2025</span>
+      </div>
+    </article>
+
+    <!-- Tarjeta 2 -->
+    <article class="project-card">
+      <div class="project-cover cover-2">🛒</div>
+      <div class="project-body">
+        <span class="project-tag">E-Commerce</span>
+        <h3 class="project-name">Tienda Online Heritage</h3>
+        <p class="project-desc">Plataforma de ventas con carrito, pasarela de pago y panel de administración integrado.</p>
+      </div>
+      <div class="project-footer">
+        <div class="project-author">
+          <div class="avatar">LP</div> Luis P.
+        </div>
+        <span class="project-date">Ene 2025</span>
+      </div>
+    </article>
+
+    <!-- Tarjeta 3 -->
+    <article class="project-card">
+      <div class="project-cover cover-3">📊</div>
+      <div class="project-body">
+        <span class="project-tag">Dashboard</span>
+        <h3 class="project-name">Panel Analítico Pro</h3>
+        <p class="project-desc">Visualización de KPIs en tiempo real con gráficos interactivos y exportación a PDF.</p>
+      </div>
+      <div class="project-footer">
+        <div class="project-author">
+          <div class="avatar">MS</div> Marta S.
+        </div>
+        <span class="project-date">Feb 2025</span>
+      </div>
+    </article>
+
+    <!-- Tarjeta 4 -->
+    <article class="project-card">
+      <div class="project-cover cover-4">📱</div>
+      <div class="project-body">
+        <span class="project-tag">Mobile App</span>
+        <h3 class="project-name">App Diario Fotográfico</h3>
+        <p class="project-desc">Aplicación iOS/Android para organizar y editar fotos analógicas digitalizadas.</p>
+      </div>
+      <div class="project-footer">
+        <div class="project-author">
+          <div class="avatar">DR</div> Diego R.
+        </div>
+        <span class="project-date">Dic 2024</span>
+      </div>
+    </article>
+
+    <!-- Tarjeta 5 -->
+    <article class="project-card">
+      <div class="project-cover cover-5">🎨</div>
+      <div class="project-body">
+        <span class="project-tag">UI / UX</span>
+        <h3 class="project-name">Design System Neutral</h3>
+        <p class="project-desc">Biblioteca de componentes accesibles con tokens de diseño para equipos multidisciplinarios.</p>
+      </div>
+      <div class="project-footer">
+        <div class="project-author">
+          <div class="avatar">CR</div> Clara R.
+        </div>
+        <span class="project-date">Nov 2024</span>
+      </div>
+    </article>
+
+    <!-- Tarjeta 6 -->
+    <article class="project-card">
+      <div class="project-cover cover-6">🌐</div>
+      <div class="project-body">
+        <span class="project-tag">Web</span>
+        <h3 class="project-name">Sitio Portafolio Colectivo</h3>
+        <p class="project-desc">Portal de exhibición para fotógrafos independientes con galería dinámica y blog integrado.</p>
+      </div>
+      <div class="project-footer">
+        <div class="project-author">
+          <div class="avatar">JM</div> Juan M.
+        </div>
+        <span class="project-date">Oct 2024</span>
+      </div>
+    </article>
+
+  </div><!-- .projects-grid -->
+</section>
+
+
+<!-- =============================================
+     JAVASCRIPT – Solo para el toggle del menú
+============================================= -->
+<script>
+  const toggle = document.getElementById('navToggle');
+  const menu   = document.getElementById('navMenu');
+
+  // Alterna la clase .open en el menú y actualiza aria-expanded
+  toggle.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Cierra el menú al hacer click en cualquier enlace (UX mobile)
+  menu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded', false);
+    });
+  });
+</script>
+
+</body>
+</html>
