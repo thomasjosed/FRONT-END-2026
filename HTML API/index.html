@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FakeStore — Tienda online con CRUD completo sobre FakeStore API" />
+  <title>FakeStore · Premium Shop</title>
+
+  <!-- Google Fonts: Playfair Display (display) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Iconos via Lucide CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===================== LOADER OVERLAY ===================== -->
+  <!-- Se muestra mientras se cargan los productos de la API -->
+  <div id="loader" class="loader" aria-live="polite" aria-label="Cargando productos">
+    <div class="loader__ring"></div>
+    <p class="loader__text">Cargando productos…</p>
+  </div>
+
+  <!-- ===================== TOAST / NOTIFICACIONES ===================== -->
+  <!-- Área donde aparecen los mensajes de éxito y error -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ===================== MODAL (ADD / EDIT) ===================== -->
+  <!-- Modal reutilizable para agregar y editar productos -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal__backdrop" id="modal-backdrop"></div>
+    <div class="modal__box">
+
+      <header class="modal__header">
+        <h2 id="modal-title" class="modal__title">Agregar producto</h2>
+        <button class="modal__close" id="modal-close" aria-label="Cerrar modal">
+          <i data-lucide="x"></i>
+        </button>
+      </header>
+
+      <!-- Formulario compartido para CREATE y UPDATE -->
+      <form id="product-form" class="modal__form" novalidate>
+
+        <!-- ID oculto: se usa en UPDATE para identificar el producto -->
+        <input type="hidden" id="product-id" />
+
+        <div class="form-group">
+          <label for="product-title">Nombre del producto *</label>
+          <input
+            type="text"
+            id="product-title"
+            placeholder="Ej: Auriculares Sony WH-1000XM5"
+            required
+            minlength="3"
+          />
+          <span class="form-error" id="error-title"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="product-price">Precio (USD) *</label>
+            <input
+              type="number"
+              id="product-price"
+              placeholder="99.99"
+              required
+              min="0.01"
+              step="0.01"
+            />
+            <span class="form-error" id="error-price"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="product-category">Categoría *</label>
+            <select id="product-category" required>
+              <option value="" disabled selected>Seleccionar…</option>
+              <!-- Las opciones se inyectan dinámicamente desde la API -->
+            </select>
+            <span class="form-error" id="error-category"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="product-description">Descripción *</label>
+          <textarea
+            id="product-description"
+            rows="3"
+            placeholder="Describe el producto…"
+            required
+            minlength="10"
+          ></textarea>
+          <span class="form-error" id="error-description"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="product-image">URL de imagen</label>
+          <input
+            type="url"
+            id="product-image"
+            placeholder="https://example.com/imagen.jpg"
+          />
+        </div>
+
+        <div class="modal__actions">
+          <button type="button" class="btn btn--ghost" id="form-cancel">Cancelar</button>
+          <button type="submit" class="btn btn--primary" id="form-submit">
+            <i data-lucide="save"></i>
+            <span id="submit-label">Guardar producto</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== DIÁLOGO DE CONFIRMACIÓN (DELETE) ===================== -->
+  <div id="confirm-dialog" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" hidden>
+    <div class="modal__backdrop" id="confirm-backdrop"></div>
+    <div class="modal__box modal__box--sm">
+      <div class="confirm__icon">
+        <i data-lucide="trash-2"></i>
+      </div>
+      <h3 id="confirm-title" class="confirm__title">¿Eliminar producto?</h3>
+      <p class="confirm__text">Esta acción no se puede deshacer. El producto será eliminado de la tienda.</p>
+      <div class="modal__actions">
+        <button class="btn btn--ghost" id="confirm-cancel">Cancelar</button>
+        <button class="btn btn--danger" id="confirm-ok">
+          <i data-lucide="trash-2"></i>
+          Sí, eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+
+      <!-- Logo -->
+      <a href="#" class="site-header__logo" aria-label="FakeStore inicio">
+        <span class="logo__icon">F</span>
+        <span class="logo__name">Fake<em>Store</em></span>
+      </a>
+
+      <!-- Barra de búsqueda -->
+      <div class="search-bar" role="search">
+        <i data-lucide="search" class="search-bar__icon"></i>
+        <input
+          type="search"
+          id="search-input"
+          class="search-bar__input"
+          placeholder="Buscar productos…"
+          aria-label="Buscar productos"
+        />
+        <button class="search-bar__clear" id="search-clear" aria-label="Limpiar búsqueda" hidden>
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <!-- Acciones del header -->
+      <div class="site-header__actions">
+        <button class="btn btn--primary" id="open-add-modal">
+          <i data-lucide="plus"></i>
+          <span>Agregar</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===================== MAIN ===================== -->
+  <main class="site-main">
+    <div class="container">
+
+      <!-- ---- Toolbar: filtros + contador ---- -->
+      <section class="toolbar" aria-label="Filtros y estadísticas">
+
+        <div class="toolbar__filters">
+          <!-- Filtro por categoría -->
+          <div class="filter-group">
+            <i data-lucide="tag"></i>
+            <select id="filter-category" aria-label="Filtrar por categoría">
+              <option value="all">Todas las categorías</option>
+              <!-- Opciones inyectadas dinámicamente -->
+            </select>
+          </div>
+
+          <!-- Ordenar por -->
+          <div class="filter-group">
+            <i data-lucide="arrow-up-down"></i>
+            <select id="filter-sort" aria-label="Ordenar productos">
+              <option value="default">Sin ordenar</option>
+              <option value="price-asc">Precio: menor a mayor</option>
+              <option value="price-desc">Precio: mayor a menor</option>
+              <option value="name-asc">Nombre: A → Z</option>
+              <option value="rating-desc">Mejor valorados</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Contador de resultados -->
+        <p class="toolbar__count" id="product-count" aria-live="polite">
+          — productos encontrados
+        </p>
+
+      </section>
+
+      <!-- ---- Grid de productos ---- -->
+      <section aria-label="Listado de productos">
+        <div id="products-grid" class="products-grid">
+          <!-- Las tarjetas se inyectan dinámicamente por JavaScript -->
+        </div>
+
+        <!-- Estado vacío (no hay resultados) -->
+        <div id="empty-state" class="empty-state" hidden>
+          <i data-lucide="package-x"></i>
+          <h3>Sin resultados</h3>
+          <p>No encontramos productos con ese criterio.<br>Intenta con otro nombre o categoría.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© 2025 <strong>FakeStore</strong> · Powered by <a href="https://fakestoreapi.com" target="_blank" rel="noopener">FakeStore API</a></p>
+      <p class="site-footer__meta">Proyecto de portfolio — CRUD con Fetch API &amp; Vanilla JS</p>
+    </div>
+  </footer>
+
+  <script src="api.js"></script>
+</body>
+</html>
