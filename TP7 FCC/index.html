@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Métricas de Testing en Amazon – Thomas Jose Daruich</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --orange:#FF9900;
+    --dark:#131921;
+    --blue:#146EB4;
+    --light-blue:#e8f3fb;
+    --text:#1a1a1a;
+    --muted:#555;
+    --bg:#f7f7f2;
+    --white:#fff;
+    --card-shadow:0 2px 20px rgba(0,0,0,.08);
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(19,25,33,.95);backdrop-filter:blur(10px);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between}
+  .nav-logo{font-family:'Syne',sans-serif;color:#fff;font-size:1.1rem;letter-spacing:-.5px}
+  .nav-logo span{color:var(--orange)}
+  .nav-links{display:flex;gap:1.5rem}
+  .nav-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:.82rem;font-weight:500;letter-spacing:.3px;transition:color .2s}
+  .nav-links a:hover{color:var(--orange)}
+
+  /* HERO */
+  .hero{min-height:100vh;background:var(--dark);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:5rem 2rem 3rem;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(255,153,0,.12) 0%,transparent 70%)}
+  .hero-badge{background:rgba(255,153,0,.15);border:1px solid rgba(255,153,0,.3);color:var(--orange);font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:.35rem 1rem;border-radius:20px;margin-bottom:1.5rem;display:inline-block}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:800;color:#fff;line-height:1.05;margin-bottom:1rem;max-width:900px}
+  .hero h1 .accent{color:var(--orange)}
+  .hero-sub{color:rgba(255,255,255,.55);font-size:1.05rem;max-width:580px;line-height:1.7;margin-bottom:2.5rem}
+  .hero-meta{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+  .hero-meta-item{text-align:center}
+  .hero-meta-item .val{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:700;color:var(--orange)}
+  .hero-meta-item .lbl{font-size:.72rem;color:rgba(255,255,255,.45);letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+  .hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem}
+  .hero-scroll span{font-size:.7rem;color:rgba(255,255,255,.35);letter-spacing:1px;text-transform:uppercase}
+  .arrow-down{width:20px;height:20px;border-right:2px solid var(--orange);border-bottom:2px solid var(--orange);transform:rotate(45deg);animation:bounce 1.5s infinite}
+  @keyframes bounce{0%,100%{transform:rotate(45deg) translateY(-4px)}50%{transform:rotate(45deg) translateY(4px)}}
+
+  /* SECTIONS */
+  section{padding:5rem 2rem}
+  .container{max-width:1100px;margin:0 auto}
+  .section-label{font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem}
+  .section-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:var(--dark);line-height:1.15;margin-bottom:1rem}
+  .section-title .acc{color:var(--orange)}
+  .section-desc{color:var(--muted);font-size:.97rem;line-height:1.75;max-width:680px;margin-bottom:3rem}
+
+  /* INTRO */
+  .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center}
+  .intro-text p{color:var(--muted);font-size:.95rem;line-height:1.8;margin-bottom:1rem}
+  .intro-text p strong{color:var(--text)}
+  .amazon-card{background:var(--white);border-radius:16px;padding:2rem;box-shadow:var(--card-shadow)}
+  .amazon-logo{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--dark);letter-spacing:-2px;margin-bottom:.5rem}
+  .amazon-logo span{color:var(--orange)}
+  .amazon-logo sub{font-size:1rem;vertical-align:-.3em;color:var(--orange)}
+  .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
+  .stat-item{background:var(--bg);border-radius:10px;padding:.9rem 1rem}
+  .stat-item .n{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--dark)}
+  .stat-item .d{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+  /* PHILOSOPHY CARDS */
+  .phil-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem}
+  .phil-card{background:var(--white);border-radius:14px;padding:1.5rem;box-shadow:var(--card-shadow);border-top:3px solid var(--orange);transition:transform .2s,box-shadow .2s}
+  .phil-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,.13)}
+  .phil-card .icon{font-size:1.6rem;margin-bottom:.8rem}
+  .phil-card h3{font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:.4rem}
+  .phil-card p{font-size:.78rem;color:var(--muted);line-height:1.6}
+
+  /* CYCLE TIMELINE */
+  .cycle-wrap{position:relative}
+  .cycle-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+  .cycle-card{background:var(--white);border-radius:14px;padding:1.6rem;box-shadow:var(--card-shadow);position:relative;overflow:hidden}
+  .cycle-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--orange)}
+  .cycle-num{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:rgba(255,153,0,.15);position:absolute;top:.5rem;right:1rem;line-height:1}
+  .cycle-phase{font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem}
+  .cycle-title{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:.8rem}
+  .cycle-metrics{list-style:none;display:flex;flex-direction:column;gap:.35rem}
+  .cycle-metrics li{font-size:.78rem;color:var(--muted);padding-left:.9rem;position:relative}
+  .cycle-metrics li::before{content:'▸';position:absolute;left:0;color:var(--orange);font-size:.6rem;top:.1em}
+
+  /* TOOLS SECTION */
+  .tools-bg{background:var(--dark)}
+  .tools-bg .section-title{color:#fff}
+  .tools-bg .section-desc{color:rgba(255,255,255,.5)}
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem}
+  .tool-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:1.4rem;transition:background .2s,border-color .2s}
+  .tool-card:hover{background:rgba(255,153,0,.08);border-color:rgba(255,153,0,.3)}
+  .tool-category{font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);margin-bottom:.7rem}
+  .tool-list{display:flex;flex-direction:column;gap:.4rem}
+  .tool-item{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:rgba(255,255,255,.75)}
+  .tool-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);flex-shrink:0}
+
+  /* CASES */
+  .cases-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem}
+  .case-card{background:var(--white);border-radius:16px;padding:1.8rem;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:1rem}
+  .case-tag{display:inline-flex;align-items:center;gap:.4rem;background:var(--light-blue);color:var(--blue);font-size:.7rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:.25rem .75rem;border-radius:20px}
+  .case-title{font-size:.97rem;font-weight:700;color:var(--dark);line-height:1.35}
+  .case-desc{font-size:.8rem;color:var(--muted);line-height:1.65}
+  .case-metrics{border-top:1px solid #f0f0f0;padding-top:1rem;display:flex;flex-direction:column;gap:.3rem}
+  .case-metric{display:flex;align-items:flex-start;gap:.5rem;font-size:.77rem;color:var(--muted)}
+  .case-metric::before{content:'✓';color:#22c55e;font-weight:700;flex-shrink:0;margin-top:.05em}
+  .case-result{background:#f0faf5;border:1px solid #bbf0d4;border-radius:10px;padding:.8rem;font-size:.77rem;color:#166534;line-height:1.5;font-weight:500}
+
+  /* CHALLENGES */
+  .challenges-list{display:flex;flex-direction:column;gap:1.2rem}
+  .challenge-item{background:var(--white);border-radius:14px;padding:1.5rem 1.8rem;box-shadow:var(--card-shadow);display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:start}
+  .challenge-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:rgba(255,153,0,.25);line-height:1;min-width:40px}
+  .challenge-content h3{font-size:.95rem;font-weight:700;color:var(--dark);margin-bottom:.35rem}
+  .challenge-content p{font-size:.82rem;color:var(--muted);line-height:1.65;margin-bottom:.6rem}
+  .lesson-box{background:#fffbf0;border-left:3px solid var(--orange);padding:.6rem .9rem;border-radius:0 8px 8px 0;font-size:.78rem;color:#7a4f00;line-height:1.55}
+  .lesson-box strong{color:#5a3800}
+
+  /* CONCLUSIONS */
+  .concl-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  .concl-card{background:var(--white);border-radius:14px;padding:1.5rem;box-shadow:var(--card-shadow);display:flex;gap:1rem;align-items:flex-start}
+  .concl-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,153,0,.12);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+  .concl-card h3{font-size:.88rem;font-weight:700;color:var(--dark);margin-bottom:.3rem}
+  .concl-card p{font-size:.78rem;color:var(--muted);line-height:1.6}
+
+  /* FOOTER */
+  footer{background:var(--dark);color:rgba(255,255,255,.4);text-align:center;padding:2rem;font-size:.78rem}
+  footer strong{color:rgba(255,255,255,.8)}
+
+  /* DIVIDER */
+  .divider{height:4px;background:linear-gradient(90deg,var(--orange) 0%,transparent 100%);margin:0}
+
+  /* RESPONSIVE */
+  @media(max-width:768px){
+    .intro-grid,.cases-grid,.cycle-steps,.concl-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+  }
+  @media(max-width:600px){
+    .cycle-steps{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">amazon<span>.</span>testing</div>
+  <div class="nav-links">
+    <a href="#intro">Empresa</a>
+    <a href="#fases">Fases</a>
+    <a href="#herramientas">Herramientas</a>
+    <a href="#casos">Casos</a>
+    <a href="#desafios">Desafíos</a>
+    <a href="#conclusiones">Conclusiones</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">7° Trabajo Práctico · FCC · UNSTA</div>
+  <h1>Métricas de<br><span class="accent">Testing</span> en Amazon</h1>
+  <p class="hero-sub">Análisis de cómo Amazon aplica métricas de calidad a lo largo de todo el ciclo de vida del software, desde la planificación hasta el mantenimiento en producción.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="val">10.000+</div>
+      <div class="lbl">Microservicios</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val">~50K</div>
+      <div class="lbl">Deploys/día</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val">99.99%</div>
+      <div class="lbl">Uptime AWS S3</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val">6</div>
+      <div class="lbl">Fases del ciclo</div>
+    </div>
+  </div>
+  <p style="color:rgba(255,255,255,.35);font-size:.8rem">Alumno: <strong style="color:rgba(255,255,255,.7)">Thomas Jose Daruich</strong> · Profesor: Ing. Tulio Ruesjas Martín · 28 de mayo de 2026</p>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="arrow-down"></div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section id="intro">
+  <div class="container">
+    <div class="intro-grid">
+      <div class="intro-text">
+        <p class="section-label">La empresa</p>
+        <h2 class="section-title">Amazon: escala <span class="acc">planetaria</span></h2>
+        <p>Amazon.com, Inc. es una de las empresas tecnológicas más grandes e influyentes del mundo. Fundada en 1994 por Jeff Bezos en Seattle, comenzó como librería en línea y se transformó en un conglomerado que abarca e-commerce, cloud computing (AWS), inteligencia artificial, dispositivos de consumo y streaming.</p>
+        <p><strong>Con ingresos superiores a los $500.000 millones anuales</strong> y más de 1.500.000 empleados, Amazon opera sistemas que procesan millones de transacciones por segundo. Un fallo en producción puede costar millones de dólares por minuto y afectar a cientos de millones de clientes.</p>
+        <p>Esta magnitud hace que la calidad del software sea absolutamente crítica. Las métricas de testing no son opcionales: son el sistema nervioso que permite innovar a velocidad sin comprometer la estabilidad.</p>
+      </div>
+      <div>
+        <div class="amazon-card">
+          <div class="amazon-logo">amazon<span>.</span>com</div>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem">Empresa analizada · TP N°7</p>
+          <div class="stat-row">
+            <div class="stat-item"><div class="n">1994</div><div class="d">Año de fundación</div></div>
+            <div class="stat-item"><div class="n">1,5M+</div><div class="d">Empleados globales</div></div>
+            <div class="stat-item"><div class="n">31%</div><div class="d">Cuota mercado cloud</div></div>
+            <div class="stat-item"><div class="n">AWS</div><div class="d">Cloud líder mundial</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FILOSOFÍA -->
+<section style="background:#fff;padding:4rem 2rem">
+  <div class="container">
+    <p class="section-label">Filosofía</p>
+    <h2 class="section-title">Principios guía del <span class="acc">testing</span></h2>
+    <p class="section-desc">Amazon define cinco principios que rigen toda su estrategia de calidad, haciendo que las métricas sean parte del ADN de cada equipo.</p>
+    <div class="phil-grid">
+      <div class="phil-card">
+        <div class="icon">🏗️</div>
+        <h3>You Build It, You Run It</h3>
+        <p>El equipo de desarrollo es dueño completo de la calidad y operación de su servicio. No hay silos entre dev, test y ops.</p>
+      </div>
+      <div class="phil-card">
+        <div class="icon">📐</div>
+        <h3>Métricas accionables</h3>
+        <p>Cada métrica debe vincularse a una acción concreta y bloquear el pipeline si no se cumple el umbral definido.</p>
+      </div>
+      <div class="phil-card">
+        <div class="icon">🤖</div>
+        <h3>Automatización primero</h3>
+        <p>Más del 90% de las pruebas son automatizadas. Las pruebas manuales quedan para exploración y validación de UX crítica.</p>
+      </div>
+      <div class="phil-card">
+        <div class="icon">◀️</div>
+        <h3>Shift-Left Testing</h3>
+        <p>Las pruebas comienzan desde la fase de diseño. TDD y BDD son prácticas estándar en los equipos de Amazon.</p>
+      </div>
+      <div class="phil-card">
+        <div class="icon">🔺</div>
+        <h3>Pirámide de pruebas</h3>
+        <p>Muchos unit tests, menos integration tests, pocos E2E. Reduce el tiempo de feedback y el costo de los fallos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FASES -->
+<section id="fases">
+  <div class="container">
+    <p class="section-label">Ciclo de vida</p>
+    <h2 class="section-title">Métricas por <span class="acc">fase</span></h2>
+    <p class="section-desc">Amazon estructura su proceso en seis fases, cada una con KPIs específicos que deben cumplirse para avanzar a la siguiente etapa del pipeline.</p>
+    <div class="cycle-steps">
+
+      <div class="cycle-card">
+        <div class="cycle-num">01</div>
+        <div class="cycle-phase">Fase 1</div>
+        <div class="cycle-title">Planificación</div>
+        <ul class="cycle-metrics">
+          <li>Defect Density Goal &lt; 0.5 bugs/KLOC</li>
+          <li>Test Coverage Target ≥ 85%</li>
+          <li>Risk Score (arch. review si &gt; 7)</li>
+          <li>Story Points vs Test Points 1:0.4</li>
+        </ul>
+      </div>
+
+      <div class="cycle-card">
+        <div class="cycle-num">02</div>
+        <div class="cycle-phase">Fase 2</div>
+        <div class="cycle-title">Diseño de Pruebas</div>
+        <ul class="cycle-metrics">
+          <li>TC Coverage 100% de user stories</li>
+          <li>TC Efficiency &gt; 0.15 defectos/TC</li>
+          <li>Requirements Traceability &gt; 95%</li>
+          <li>Review Defect Density &lt; 2/página</li>
+        </ul>
+      </div>
+
+      <div class="cycle-card">
+        <div class="cycle-num">03</div>
+        <div class="cycle-phase">Fase 3</div>
+        <div class="cycle-title">Ejecución</div>
+        <ul class="cycle-metrics">
+          <li>Pass Rate &gt; 98% para merge</li>
+          <li>Code Coverage &gt; 80% (S3)</li>
+          <li>Flakiness Rate &lt; 1%</li>
+          <li>Test Execution Time &lt; 10 min</li>
+          <li>MTTD &lt; 5 min (Amazon Retail)</li>
+        </ul>
+      </div>
+
+      <div class="cycle-card">
+        <div class="cycle-num">04</div>
+        <div class="cycle-phase">Fase 4</div>
+        <div class="cycle-title">Monitoreo</div>
+        <ul class="cycle-metrics">
+          <li>Canary Error Rate (rollback si &gt; 0.1%)</li>
+          <li>Defect Removal Efficiency &gt; 95%</li>
+          <li>Bug Reopening Rate &lt; 5%</li>
+          <li>P0/P1 Bug Trend (revisión semanal)</li>
+        </ul>
+      </div>
+
+      <div class="cycle-card">
+        <div class="cycle-num">05</div>
+        <div class="cycle-phase">Fase 5</div>
+        <div class="cycle-title">Entrega (Release)</div>
+        <ul class="cycle-metrics">
+          <li>Release Readiness Score &gt; 90/100</li>
+          <li>Rollback Rate &lt; 0.5%</li>
+          <li>Change Failure Rate &lt; 1% (DORA)</li>
+          <li>SLA Compliance &gt; 99.99% (S3, EC2)</li>
+        </ul>
+      </div>
+
+      <div class="cycle-card">
+        <div class="cycle-num">06</div>
+        <div class="cycle-phase">Fase 6</div>
+        <div class="cycle-title">Mantenimiento</div>
+        <ul class="cycle-metrics">
+          <li>MTTR &lt; 15 min (SLA interno AWS)</li>
+          <li>Availability 99.99% (cuatro nueves)</li>
+          <li>Error Budget consumo controlado</li>
+          <li>Customer-Reported Defects KPI</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HERRAMIENTAS -->
+<section id="herramientas" class="tools-bg">
+  <div class="container">
+    <p class="section-label" style="color:var(--orange)">Stack tecnológico</p>
+    <h2 class="section-title">Herramientas y <span class="acc">frameworks</span></h2>
+    <p class="section-desc">Amazon combina herramientas propias desarrolladas in-house con herramientas open-source líderes del mercado.</p>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-category">Testing Automatizado</div>
+        <div class="tool-list">
+          <div class="tool-item"><div class="tool-dot"></div>JUnit / TestNG (Java)</div>
+          <div class="tool-item"><div class="tool-dot"></div>Selenium / WebDriver</div>
+          <div class="tool-item"><div class="tool-dot"></div>PyTest (Python/Lambda)</div>
+          <div class="tool-item"><div class="tool-dot"></div>Mockito / EasyMock</div>
+          <div class="tool-item"><div class="tool-dot"></div>Cucumber / Gherkin (BDD)</div>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-category">CI/CD Pipeline</div>
+        <div class="tool-list">
+          <div class="tool-item"><div class="tool-dot"></div>AWS CodePipeline / CodeBuild</div>
+          <div class="tool-item"><div class="tool-dot"></div>Brazil Build System (interno)</div>
+          <div class="tool-item"><div class="tool-dot"></div>Apollo Deployment System</div>
+          <div class="tool-item"><div class="tool-dot"></div>Jenkins (equipos externos)</div>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-category">Monitoreo y Obs.</div>
+        <div class="tool-list">
+          <div class="tool-item"><div class="tool-dot"></div>Amazon CloudWatch</div>
+          <div class="tool-item"><div class="tool-dot"></div>AWS X-Ray (tracing)</div>
+          <div class="tool-item"><div class="tool-dot"></div>Amazon OpenSearch / Kibana</div>
+          <div class="tool-item"><div class="tool-dot"></div>AWS Fault Injection Simulator</div>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-category">Calidad de Código</div>
+        <div class="tool-list">
+          <div class="tool-item"><div class="tool-dot"></div>JaCoCo (cobertura Java)</div>
+          <div class="tool-item"><div class="tool-dot"></div>SonarQube (análisis estático)</div>
+          <div class="tool-item"><div class="tool-dot"></div>Checkstyle / PMD</div>
+          <div class="tool-item"><div class="tool-dot"></div>Amazon CodeGuru (IA review)</div>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-category">Gestión de Métricas</div>
+        <div class="tool-list">
+          <div class="tool-item"><div class="tool-dot"></div>Amazon internal ticketing (sim)</div>
+          <div class="tool-item"><div class="tool-dot"></div>Amazon Metrics Dashboard</div>
+          <div class="tool-item"><div class="tool-dot"></div>AWS DevOps Guru (ML)</div>
+          <div class="tool-item"><div class="tool-dot"></div>ORR Checklist por servicio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASOS -->
+<section id="casos" style="background:#fff">
+  <div class="container">
+    <p class="section-label">Evidencia real</p>
+    <h2 class="section-title">Casos de <span class="acc">estudio</span></h2>
+    <p class="section-desc">Tres casos concretos donde Amazon aplicó métricas de testing con resultados medibles y documentados.</p>
+    <div class="cases-grid">
+
+      <div class="case-card">
+        <div><span class="case-tag">🛒 E-Commerce</span></div>
+        <div class="case-title">Prime Day 2023 – Testing de Carga a Escala Global</div>
+        <div class="case-desc">Simulaciones de carga durante 6 semanas previas al evento, simulando 300M de operaciones/hora con AWS Distributed Load Testing.</div>
+        <div class="case-metrics">
+          <div class="case-metric">Latencia P99 &lt; 100ms bajo carga máxima</div>
+          <div class="case-metric">Error Rate &lt; 0.01% en pruebas de stress</div>
+          <div class="case-metric">150.000 transacciones/seg sostenidas 2h</div>
+          <div class="case-metric">Auto-scaling &lt; 60 seg ante picos súbitos</div>
+        </div>
+        <div class="case-result">375M artículos vendidos en 48hs sin incidentes P0. Disponibilidad &gt; 99.99%.</div>
+      </div>
+
+      <div class="case-card">
+        <div><span class="case-tag">☁️ Cloud</span></div>
+        <div class="case-title">AWS S3 – Error Budgets y SLOs</div>
+        <div class="case-desc">Implementación de Error Budgets para balancear velocidad de innovación con estabilidad del servicio más usado de AWS.</div>
+        <div class="case-metrics">
+          <div class="case-metric">SLO 99.99% disponibilidad mensual</div>
+          <div class="case-metric">Alertas en 50%, 75% y 90% del budget</div>
+          <div class="case-metric">Freeze automático si budget se agota</div>
+          <div class="case-metric">Post-mortem si &gt; 80% en &lt; 15 días</div>
+        </div>
+        <div class="case-result">S3 mantiene 99.999999999% (11 nueves) de durabilidad de datos desde su lanzamiento.</div>
+      </div>
+
+      <div class="case-card">
+        <div><span class="case-tag">🎙️ IA / NLU</span></div>
+        <div class="case-title">Alexa – Testing de IA Conversacional</div>
+        <div class="case-desc">Framework propio para medir precisión de NLU en múltiples idiomas y dialectos sobre un conjunto de 10M+ utterances de prueba.</div>
+        <div class="case-metrics">
+          <div class="case-metric">Intent Recognition &gt; 95% accuracy</div>
+          <div class="case-metric">Slot Filling &gt; 92% entidades críticas</div>
+          <div class="case-metric">False Rejection Rate &lt; 3%</div>
+          <div class="case-metric">Latencia E2E P95 &lt; 1.5 segundos</div>
+        </div>
+        <div class="case-result">Customer-Reported Defects reducidos 40% entre 2020–2023. 500M+ dispositivos habilitados.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DESAFÍOS -->
+<section id="desafios">
+  <div class="container">
+    <p class="section-label">Lecciones aprendidas</p>
+    <h2 class="section-title">Desafíos y <span class="acc">soluciones</span></h2>
+    <p class="section-desc">Los cinco principales obstáculos que Amazon enfrentó en la implementación de métricas de testing y cómo los resolvió.</p>
+    <div class="challenges-list">
+      <div class="challenge-item">
+        <div class="challenge-num">01</div>
+        <div class="challenge-content">
+          <h3>Escalabilidad de las suites de testing</h3>
+          <p>Miles de microservicios generaron suites de pruebas enormes y lentas, haciendo imposible mantener tiempos de feedback cortos en CI.</p>
+          <div class="lesson-box"><strong>Lección:</strong> Crear equipos dedicados de "Testing Infrastructure" que mantienen frameworks de testing como productos internos con SLAs propios y paralelización masiva.</div>
+        </div>
+      </div>
+      <div class="challenge-item">
+        <div class="challenge-num">02</div>
+        <div class="challenge-content">
+          <h3>Test Flakiness (pruebas inestables)</h3>
+          <p>Hasta el 15% de los fallos de CI eran falsos positivos por tests inestables, reduciendo la confianza en los pipelines y ralentizando el desarrollo.</p>
+          <div class="lesson-box"><strong>Lección:</strong> Sistema "Flaky Test Quarantine" que aísla automáticamente tests inestables. Regla obligatoria: corregir o eliminar en 5 días laborables.</div>
+        </div>
+      </div>
+      <div class="challenge-item">
+        <div class="challenge-num">03</div>
+        <div class="challenge-content">
+          <h3>Cobertura de APIs y dependencias externas</h3>
+          <p>Garantizar calidad E2E cuando parte de la cadena (APIs de otros equipos o terceros) escapa al control del equipo es un desafío organizacional.</p>
+          <div class="lesson-box"><strong>Lección:</strong> Consumer-Driven Contract Testing con Pact. Los equipos consumidores definen contratos de API que los proveedores deben respetar.</div>
+        </div>
+      </div>
+      <div class="challenge-item">
+        <div class="challenge-num">04</div>
+        <div class="challenge-content">
+          <h3>Gestión coherente en entornos de microservicios</h3>
+          <p>Con 10.000+ microservicios, cada equipo definía métricas propias, imposibilitando la visión global del estado de calidad del sistema.</p>
+          <div class="lesson-box"><strong>Lección:</strong> ORR (Operational Readiness Review) checklist estándar obligatorio + dashboards ejecutivos que agregan métricas por organización y producto.</div>
+        </div>
+      </div>
+      <div class="challenge-item">
+        <div class="challenge-num">05</div>
+        <div class="challenge-content">
+          <h3>Equilibrio entre velocidad y calidad</h3>
+          <p>La presión por innovar llevaba a reducir el rigor de testing para cumplir deadlines, generando deuda técnica y eventualmente incidentes costosos.</p>
+          <div class="lesson-box"><strong>Lección:</strong> Error Budgets + "You Build It, You Run It" generan motivación intrínseca para la calidad. Los incidentes en producción cuestan más que las pruebas omitidas.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSIONES -->
+<section id="conclusiones" style="background:#fff">
+  <div class="container">
+    <p class="section-label">Cierre</p>
+    <h2 class="section-title">Conclusiones y <span class="acc">recomendaciones</span></h2>
+    <p class="section-desc">Las lecciones de Amazon son aplicables a cualquier organización que busque escalar con calidad.</p>
+    <div class="concl-grid">
+      <div class="concl-card">
+        <div class="concl-icon">📊</div>
+        <div>
+          <h3>Adoptar métricas DORA</h3>
+          <p>Change Failure Rate, Deployment Frequency, MTTR y Lead Time son universales. Aplicables a cualquier equipo, independientemente del tamaño.</p>
+        </div>
+      </div>
+      <div class="concl-card">
+        <div class="concl-icon">🔒</div>
+        <div>
+          <h3>Implementar Quality Gates</h3>
+          <p>Bloquear automáticamente merges que no cumplan cobertura y pass rate. No se puede depender de la disciplina manual a escala.</p>
+        </div>
+      </div>
+      <div class="concl-card">
+        <div class="concl-icon">🧰</div>
+        <div>
+          <h3>Invertir en infraestructura de testing</h3>
+          <p>Tratar el framework de testing como un producto interno con mantenimiento activo. Tests lentos o inestables destruyen la productividad.</p>
+        </div>
+      </div>
+      <div class="concl-card">
+        <div class="concl-icon">💰</div>
+        <div>
+          <h3>Definir Error Budgets</h3>
+          <p>Establecer SLOs realistas y presupuestos de error. Permite tomar decisiones de priorización basadas en datos, no en intuición.</p>
+        </div>
+      </div>
+      <div class="concl-card">
+        <div class="concl-icon">◀️</div>
+        <div>
+          <h3>Shift-Left Testing</h3>
+          <p>Involucrar a QA desde la definición de requisitos, no solo en ejecución. Detectar defectos antes es siempre más barato que detectarlos después.</p>
+        </div>
+      </div>
+      <div class="concl-card">
+        <div class="concl-icon">📋</div>
+        <div>
+          <h3>Estandarizar métricas mínimas</h3>
+          <p>Definir un conjunto de métricas obligatorias para todos los servicios y construir dashboards que comparen la salud de calidad entre equipos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Thomas Jose Daruich</strong> · Fundamentos del Control de Calidad · 7° TP</p>
+  <p style="margin-top:.4rem">Facultad de Ingeniería – TDSC – UNSTA · Profesor: Ing. Tulio Ruesjas Martín · Mayo 2026</p>
+  <p style="margin-top:.4rem;font-size:.7rem">Trabajo elaborado con asistencia de Inteligencia Artificial (Claude – Anthropic)</p>
+</footer>
+
+</body>
+</html>
